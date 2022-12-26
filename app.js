@@ -9,8 +9,33 @@ app.use(bodyparser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.set("view engine", "ejs");
 
+var myCity = "";
+var myCountry = "";
+var myTemp = "";
+var myTempMin = "";
+var myTempMax = "";
+var myIcon = "";
+var weatherDesc = "";
+var today = new Date();
+var options = {
+  weekday: "long",
+  month: "long",
+  day: "numeric",
+  year: "numeric",
+};
+var day = today.toLocaleDateString("en-US", options);
+
 app.get("/", function (req, res) {
-  res.render("home", { my_var: "this var" });
+  res.render("home", {
+    myCity,
+    myCountry,
+    myIcon,
+    myTemp,
+    myTempMax,
+    myTempMin,
+    weatherDesc,
+    day,
+  });
 });
 
 app.post("/", function (req, res) {
@@ -28,20 +53,35 @@ app.post("/", function (req, res) {
       // console.log(req.body.cityname);
       // console.log(my_data.main.temp);
       // console.log(my_data.weather[0].description);
-      const icon = my_data.weather[0].icon;
-      const icon_url = "http://openweathermap.org/img/wn/" + icon + "@2x.png";
-      res.write(
-        "<h1>The temperature in " +
-          city +
-          " is (in Kelvin) " +
-          my_data.main.temp +
-          " </h1>"
-      );
-      res.write(
-        "<p> the weather is like " + my_data.weather[0].description + "</p>"
-      );
-      res.write('<img src="' + icon_url + '" alt="">');
-      res.send();
+      // console.log(my_data.sys.country);
+      // console.log(my_data.name);
+      try {
+        const icon = my_data.weather[0].icon;
+        const icon_url = "http://openweathermap.org/img/wn/" + icon + "@2x.png";
+        // res.write(
+        //   "<h1>The temperature in " +
+        //     city +
+        //     " is (in Kelvin) " +
+        //     my_data.main.temp +
+        //     " </h1>"
+        // );
+        // res.write(
+        //   "<p> the weather is like " + my_data.weather[0].description + "</p>"
+        // );
+        // res.write('<img src="' + icon_url + '" alt="">');
+        myCity = my_data.name;
+        myCountry = my_data.sys.country;
+        myTemp = Math.floor(my_data.main.temp - 273);
+        myTempMax = Math.floor(my_data.main.temp_max - 273);
+        myTempMin = Math.floor(my_data.main.temp_min - 273);
+        weatherDesc = my_data.weather[0].description;
+        myIcon = icon_url;
+        res.redirect("/");
+      } catch (error) {
+        myCity = "Please Enter Correct City Name";
+        myCountry = "";
+        res.redirect("/");
+      }
     });
   });
 });

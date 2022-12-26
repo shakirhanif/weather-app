@@ -7,15 +7,43 @@
     <title>Open Weather</title>
   </head>
   <body>
-    <form action="/" method="post">
-      <label for="cityinput">City Name: </label>
-      <input
-        id="cityinput"
-        type="text"
-        name="cityname"
-        placeholder="type city name"
-      />
-      <button type="submit">Go</button>
-    </form>
+    <div class="app-wrap">
+      <header>
+        <form action="/" method="post">
+          <input
+            type="text"
+            autocomplete="off"
+            class="search-box"
+            name="cityname"
+            placeholder="Search for a city..."
+          />
+          <button class="btn" type="submit">Go</button>
+        </form>
+      </header>
+      <main>
+        <% if(myCountry!==''){ %>
+        <section class="location">
+          <div class="date">Sunday 1 January 2023</div>
+
+          <div class="city"><%= myCity %> , <%= myCountry %></div>
+        </section>
+
+        <div class="current">
+          <div class="temp"><%= myTemp %> <span>°c</span></div>
+          <div class="my-icon">
+            <img class="my-img" src="<%= myIcon %>" alt="" />
+          </div>
+          <div class="weather"><%= weatherDesc %></div>
+          <div class="hi-low"><%= myTempMin %> °c / <%= myTempMax %> °c</div>
+        </div>
+        <% } else { %>
+        <section class="location">
+          <div class="date"><%= day %></div>
+
+          <div class="city"><%= myCity %></div>
+        </section>
+        <% } %>
+      </main>
+    </div>
   </body>
 </html>
