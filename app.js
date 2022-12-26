@@ -39,7 +39,7 @@ app.get("/", function (req, res) {
 });
 
 app.post("/", function (req, res) {
-  const api_key = process.env.API_KEY;
+  const api_key = "64ad822abb95aa9b3e16c4c272d33645";
   const city = req.body.cityname;
   const url =
     "https://api.openweathermap.org/data/2.5/weather?q=" +
